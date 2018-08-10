@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+
+    
+  <url>
+    <loc>http://czhou.cc/2018/08/10/sync-vscode-with-dropbox/</loc>
+    <lastmod>2018-08-10T12:52:12.062Z</lastmod>
+    <data>
+        <display>
+        <title>Synchronize Visual Studio Code Settings by Dropbox</title>
+        <pubTime>2018-08-10T06:47:41.000Z</pubTime>
+        
+        <tag>VSCode</tag>
+         
+        <tag>Dropbox</tag>
+         
+         
+           
+             
+              <breadCrumb title="Computer Skills" url="http://czhou.cc/categories/Computer-Skills/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://czhou.cc/2016/04/29/install-ode-on-ubuntu/</loc>
+    <lastmod>2017-07-06T08:23:45.006Z</lastmod>
+    <data>
+        <display>
+        <title>在 Ubuntu 14.04 下安装 Open Dynamics Engine (ODE) 0.14</title>
+        <pubTime>2016-04-29T13:15:32.000Z</pubTime>
+        
+        <tag>ODE</tag>
+         
+        <tag>Linux</tag>
+         
+         
+           
+             
+              <breadCrumb title="Robotics" url="http://czhou.cc/categories/Robotics/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://czhou.cc/2016/05/01/open-sublime-after-hexo-new/</loc>
+    <lastmod>2016-12-20T16:05:18.843Z</lastmod>
+    <data>
+        <display>
+        <title>Hexo新建文章后立即打开Sublime Text编辑器</title>
+        <pubTime>2016-05-01T11:21:48.000Z</pubTime>
+        
+        <tag>Hexo</tag>
+         
+        <tag>Sublime</tag>
+         
+         
+           
+             
+              <breadCrumb title="Computer Skills" url="http://czhou.cc/categories/Computer-Skills/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://czhou.cc/2016/05/03/sublime-as-default-editor/</loc>
+    <lastmod>2016-05-03T17:38:35.000Z</lastmod>
+    <data>
+        <display>
+        <title>Ubuntu下设置Sublime Text作为默认的文本编辑器</title>
+        <pubTime>2016-05-03T11:02:09.000Z</pubTime>
+        
+        <tag>Linux</tag>
+         
+        <tag>Sublime</tag>
+         
+         
+           
+             
+              <breadCrumb title="Computer Skills" url="http://czhou.cc/categories/Computer-Skills/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+    
+    
+</urlset>
