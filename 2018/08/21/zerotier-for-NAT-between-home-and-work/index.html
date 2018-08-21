@@ -88,12 +88,15 @@
 <meta property="og:url" content="http://czhou.cc/2018/08/21/zerotier-for-NAT-between-home-and-work/index.html">
 <meta property="og:site_name" content="小胖のメモ帳">
 <meta property="og:description" content="最近用Linux Deploy在旧安卓手机上配置了一个服务器，但是由于家里的网络没有公网ip，在外面无法连接到这个服务器上。同时，公司里的电脑也是只有内网ip，在家里也无法直接远程连接，所以稍微折腾了一下。">
+<meta property="og:image" content="http://czhou.cc/sweat_smile.png）。\
+网上搜索了一下，有不少解决方案，最终选定[Zerotier](https://www.zerotier.com/">
 <meta property="og:image" content="http://czhou.cc/zerotierGlobalRouteRule-updated.png">
-<meta property="og:updated_time" content="2018-08-21T09:35:30.396Z">
+<meta property="og:updated_time" content="2018-08-21T10:35:26.105Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用Zerotier内网穿透连接多个局域网内服务器以及VPN设置">
 <meta name="twitter:description" content="最近用Linux Deploy在旧安卓手机上配置了一个服务器，但是由于家里的网络没有公网ip，在外面无法连接到这个服务器上。同时，公司里的电脑也是只有内网ip，在家里也无法直接远程连接，所以稍微折腾了一下。">
-<meta name="twitter:image" content="http://czhou.cc/zerotierGlobalRouteRule-updated.png">
+<meta name="twitter:image" content="http://czhou.cc/sweat_smile.png）。\
+网上搜索了一下，有不少解决方案，最终选定[Zerotier](https://www.zerotier.com/">
 
 
 
@@ -413,7 +416,8 @@
 </ul>
 </li>
 </ul>
-<p>可见基本上囊括了常见的设备以及系统类型（不列出来真不知道自己竟然有这么多设备:sweat_smile:）。\<br>网上搜索了一下，有不少解决方案，最终选定<a href="https://www.zerotier.com/" target="_blank" rel="external">Zerotier</a>，主要是因为其跨平台，易于配置，免费（100台设备以下免费，个人绝对够用）等特点，实际部署的时候虽然有点小坑（主要是安卓服务器上），但是确实特别容易就在所有的设备上都配置成功，并且测试通过所需功能。</p>
+<p>可见基本上囊括了常见的设备以及系统类型（不列出来真不知道自己竟然有这么多设备<img src="sweat_smile.png）。\
+网上搜索了一下，有不少解决方案，最终选定[Zerotier](https://www.zerotier.com/" alt="">，主要是因为其跨平台，易于配置，免费（100台设备以下免费，个人绝对够用）等特点，实际部署的时候虽然有点小坑（主要是安卓服务器上），但是确实特别容易就在所有的设备上都配置成功，并且测试通过所需功能。</p>
 <h1 id="配置Zerotier"><a href="#配置Zerotier" class="headerlink" title="配置Zerotier"></a>配置Zerotier</h1><p>关于Zerotier的原理，这个网上的介绍比较多，这里就不多说了。\<br>在设备上配置的大概步骤如下：</p>
 <ol>
 <li>注册Zerotier账户并登陆</li>
@@ -444,6 +448,36 @@
 </ol>
 <p>成功后，其他网络（L1，L3）的设备就可以通过L2网络上网了。\<br>也可以在利用<a href="https://checkmyip.com/" target="_blank" rel="external">checkmyip</a>等网络工具来确认VPN是否连接成功。</p>
 <p>更加具体的教程可以参照<a href="https://www.digitalocean.com/community/tutorials/getting-started-software-defined-networking-creating-vpn-zerotier-one" target="_blank" rel="external">这个</a>。</p>
+<h1 id="安卓服务器配置Zerotier"><a href="#安卓服务器配置Zerotier" class="headerlink" title="安卓服务器配置Zerotier"></a>安卓服务器配置Zerotier</h1><p>由于Linux Deploy安装的系统其实是实现了个<code>chroot()</code>，无法直接调用<code>systemd</code>命令，在安装过程中会直接ignore一些配置，导致安装Zerotier不完全，所以要稍微修改一下安装脚本，并手动安装配置文件。<br>更新第3步如下，</p>
+<ol>
+<li><ol>
+<li><p>如果之前按照官网指示（原第3步）已经安装过Zerotier的话，需要先卸载</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get remove zerotier-one</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>下载安装脚本并保存到本地</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl <span class="_">-s</span> https://install.zerotier.com/ -o zerotier_setup.sh</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>安装<a href="https://github.com/smaknsk/servicectl" target="_blank" rel="external"><code>servicectl</code></a>来替换脚本中的<code>systemctl</code></p>
+</li>
+<li><p>修改</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> [ <span class="_">-e</span> /usr/bin/systemctl -o <span class="_">-e</span> /usr/sbin/systemctl -o <span class="_">-e</span> /sbin/systemctl -o <span class="_">-e</span> /bin/systemctl ]; <span class="keyword">then</span></span><br><span class="line">    <span class="variable">$SUDO</span> systemctl <span class="built_in">enable</span> zerotier-one</span><br><span class="line">    <span class="variable">$SUDO</span> systemctl start zerotier-one</span><br></pre></td></tr></table></figure>
+<p> 为</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> [ <span class="_">-e</span> /usr/<span class="built_in">local</span>/bin/servicectl]; <span class="keyword">then</span></span><br><span class="line">    <span class="variable">$SUDO</span> bash servicectl <span class="built_in">enable</span> zerotier-one <span class="comment"># need to enforce bash for executing servicectl</span></span><br><span class="line">    <span class="variable">$SUDO</span> bash servicectl start zerotier-one</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>下载zerotier-one安装文件并解压</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://download.zerotier.com/RELEASES/1.2.12/dist/debian/xenial/pool/main/z/zerotier-one/zerotier-one_1.2.12_armhf.deb</span><br><span class="line">dpkg -x zerotier-one_1.2.12_armhf.deb ./zerotier-one</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>复制配置文件到系统文件夹</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo cp -r etc /</span><br><span class="line">sudo cp -r lib /var</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行脚本<code>sudo bash zerotier_setup.sh</code></p>
+</li>
+<li>如果没有报错，应该会生成一个Zerotier地址，然后直接加入第2步的网络就可以了 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo zerotier-cli join NetworkID</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+</ol>
+<p>*[NAT]: Network-Address-Translation</p>
 
       
     </div>
@@ -621,7 +655,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#问题描述"><span class="nav-number">1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置Zerotier"><span class="nav-number">2.</span> <span class="nav-text">配置Zerotier</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实现VPN"><span class="nav-number">3.</span> <span class="nav-text">实现VPN</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#问题描述"><span class="nav-number">1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置Zerotier"><span class="nav-number">2.</span> <span class="nav-text">配置Zerotier</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实现VPN"><span class="nav-number">3.</span> <span class="nav-text">实现VPN</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安卓服务器配置Zerotier"><span class="nav-number">4.</span> <span class="nav-text">安卓服务器配置Zerotier</span></a></li></ol></div>
             
           </div>
         </section>
