@@ -88,10 +88,12 @@
 <meta property="og:url" content="http://czhou.cc/2018/08/21/zerotier-for-NAT-between-home-and-work/index.html">
 <meta property="og:site_name" content="小胖のメモ帳">
 <meta property="og:description" content="最近用Linux Deploy在旧安卓手机上配置了一个服务器，但是由于家里的网络没有公网ip，在外面无法连接到这个服务器上。同时，公司里的电脑也是只有内网ip，在家里也无法直接远程连接，所以稍微折腾了一下。">
-<meta property="og:updated_time" content="2018-08-21T08:04:57.485Z">
+<meta property="og:image" content="http://czhou.cc/zerotierGlobalRouteRule-updated.png">
+<meta property="og:updated_time" content="2018-08-21T09:28:21.968Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用Zerotier内网穿透连接多个局域网内服务器以及VPN设置">
 <meta name="twitter:description" content="最近用Linux Deploy在旧安卓手机上配置了一个服务器，但是由于家里的网络没有公网ip，在外面无法连接到这个服务器上。同时，公司里的电脑也是只有内网ip，在家里也无法直接远程连接，所以稍微折腾了一下。">
+<meta name="twitter:image" content="http://czhou.cc/zerotierGlobalRouteRule-updated.png">
 
 
 
@@ -388,7 +390,61 @@
 
       
         <p>最近用<a href="https://github.com/meefik/linuxdeploy" target="_blank" rel="external">Linux Deploy</a>在旧安卓手机上配置了一个服务器，但是由于家里的网络没有公网ip，在外面无法连接到这个服务器上。同时，公司里的电脑也是只有内网ip，在家里也无法直接远程连接，所以稍微折腾了一下。<br><a id="more"></a></p>
-<h1 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h1><p>需要下记的多台局域网内（没有公网ip）的多台设备的能够互相访问。<br>-局域网： L1（家庭内网），L2（公司内网），L3（移动网络），…<br>-设备： L1-D1（安卓服务器），L2-D1（公司电脑），L3-D1(手机)</p>
+<h1 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h1><p>需要下记的多台局域网内（即没有公网ip）的多台设备的能够互相访问。</p>
+<ul>
+<li>网络情况：<ul>
+<li>L1（家庭内网）<ul>
+<li>L1-D1（安卓服务器，Ubuntu 16.04）</li>
+<li>L1-D2（电脑，macOS High Sierra）</li>
+<li>L1-D3（电脑，Windows 10）</li>
+</ul>
+</li>
+<li>L2（公司内网）<ul>
+<li>L2-D1（电脑，Ubuntu 18.04）</li>
+<li>L2-D2（电脑，Windows 10）</li>
+</ul>
+</li>
+<li>L3（移动网络）<ul>
+<li>L3-D1(手机，Android 9)</li>
+<li>L3-D2(手机，iOS 11)</li>
+</ul>
+</li>
+<li>…</li>
+</ul>
+</li>
+</ul>
+<p>可见基本上囊括了常见的设备以及系统类型（不列出来真不知道自己竟然有这么多设备:sweat_smile:）。\<br>网上搜索了一下，有不少解决方案，最终选定<a href="https://www.zerotier.com/" target="_blank" rel="external">Zerotier</a>，主要是因为其跨平台，易于配置，免费（100台设备以下免费，个人绝对够用）等特点，实际部署的时候虽然有点小坑（主要是安卓服务器上），但是确实特别容易就在所有的设备上都配置成功，并且测试通过所需功能。</p>
+<h1 id="配置Zerotier"><a href="#配置Zerotier" class="headerlink" title="配置Zerotier"></a>配置Zerotier</h1><p>关于Zerotier的原理，这个网上的介绍比较多，这里就不多说了。\<br>在设备上配置的大概步骤如下：</p>
+<ol>
+<li>注册Zerotier账户并登陆</li>
+<li>在<code>Networks</code>里新建一个网络，记下<code>Network ID</code></li>
+<li><p>按照官网上的<a href="https://www.zerotier.com/download.shtml" target="_blank" rel="external">指示</a>在各设备配置</p>
+<ul>
+<li>手机：在App Store或者Google Play Store上下载<code>ZeroTier One</code>安装</li>
+<li><p>电脑：安装完后如下显示便是安装成功</p>
+  <figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">*** Success! You are ZeroTier address [ 916af8664d ].</span></span><br></pre></td></tr></table></figure>
+<p>  然后加入第2步建立的网络</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo zerotier-cli join NetworkID</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>回到官网，进入第2步建立的网络里，在你的设备列表的<code>Auth</code>上打钩授权，设备就完成加入Zerotier网络了</p>
+</li>
+</ol>
+<p>配置完成后，可以用不同设备互相<code>ping</code>一下各自Zerotier IP，确认连接已经建立。</p>
+<p>然后，各个设备就相当于在同一个Zerotier局域网内，想怎么操作都可以了。</p>
+<h1 id="实现VPN"><a href="#实现VPN" class="headerlink" title="实现VPN"></a>实现VPN</h1><p>这也是一个比较重要的功能，有一些授权的网站是识别公司的ip来进行访问的，那么在家的时候就无法查看这些网站了，但是通过Zerotier可以很简单的实现VPN功能。</p>
+<ol>
+<li>在公司的电脑（L2-D1）上设置ip转发。打开<code>/etc/sysctl.conf</code>添加<code>net.ipv4.ip_forward = 1</code>，并运行<code>sudo sysctl -p</code>来激活</li>
+<li><p>运行下列指令实现NAT以及ip伪装</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE</span><br><span class="line">sudo iptables -A FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT</span><br><span class="line">sudo iptables -A FORWARD -i zt0 -o eth0 -j ACCEPT</span><br></pre></td></tr></table></figure>
+<p>其中<code>etho</code>和<code>zt0</code>是上网卡和Zerotier网卡名字，可通过<code>ifconfig</code>查看</p>
+</li>
+<li>回到官网，进入第2步建立的网络里，在<code>Managed Routes</code>添加路由规则，大概长这个样子<br> <img src="zerotierGlobalRouteRule-updated.png" alt=""><br> 有个橘色的地球图标表示ip转发成功。</li>
+</ol>
+<p>成功后，其他网络（L1，L3）的设备就可以通过L2网络上网了。\<br>也可以在利用<a href="https://checkmyip.com/" target="_blank" rel="external">checkmyip</a>等网络工具来确认VPN是否连接成功。</p>
+<p>更加具体的教程可以参照<a href="https://www.digitalocean.com/community/tutorials/getting-started-software-defined-networking-creating-vpn-zerotier-one" target="_blank" rel="external">这个</a>。</p>
+<p>*[NAT]: Network-Address-Translation</p>
 
       
     </div>
@@ -566,7 +622,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#问题描述"><span class="nav-number">1.</span> <span class="nav-text">问题描述</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#问题描述"><span class="nav-number">1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置Zerotier"><span class="nav-number">2.</span> <span class="nav-text">配置Zerotier</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实现VPN"><span class="nav-number">3.</span> <span class="nav-text">实现VPN</span></a></li></ol></div>
             
           </div>
         </section>
