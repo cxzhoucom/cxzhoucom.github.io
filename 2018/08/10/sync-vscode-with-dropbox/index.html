@@ -88,7 +88,7 @@
 <meta property="og:url" content="http://czhou.cc/2018/08/10/sync-vscode-with-dropbox/index.html">
 <meta property="og:site_name" content="小胖のメモ帳">
 <meta property="og:description" content="The Visual Studio Code (VSCode) ‘s user settings and extensions are saved in">
-<meta property="og:updated_time" content="2018-08-10T12:52:12.000Z">
+<meta property="og:updated_time" content="2018-08-21T12:21:07.939Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Synchronize Visual Studio Code Settings by Dropbox">
 <meta name="twitter:description" content="The Visual Studio Code (VSCode) ‘s user settings and extensions are saved in">
@@ -387,10 +387,7 @@
       
 
       
-        <p>The Visual Studio Code (VSCode) ‘s user settings and extensions are saved in<br><a id="more"></a><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~/.config/Code/User</span><br></pre></td></tr></table></figure></p>
-<p>and</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~/.vscode/extensions</span><br></pre></td></tr></table></figure>
-<p>respectively.</p>
+        <p>The Visual Studio Code (VSCode) ‘s user settings and extensions are saved in<br><a id="more"></a><br><code>~/.config/Code/User</code> and <code>~/.vscode/extensions</code> respectively.</p>
 <p>Move these two folders into your Dropbox folder, for instance,<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mv -r  ~/.config/Code/User ~/Dropbox/appdata/vscode/User</span><br><span class="line">mv -r  ~/.config/Code/extensions ~/Dropbox/appdata/vscode/extensions</span><br></pre></td></tr></table></figure></p>
 <p>and then create symbolic links in the previous locations,<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ln <span class="_">-s</span> ~/Dropbox/appdata/vscode/User  ~/.config/Code/User</span><br><span class="line">ln <span class="_">-s</span> ~/Dropbox/appdata/vscode/extensions  ~/.config/Code/extensions</span><br></pre></td></tr></table></figure></p>
 <p>Therefore, the VSCode settings and extensions are actually saved in your Dropbox and synchronized automatically.</p>
