@@ -4,8 +4,23 @@
 
     
   <url>
+    <loc>http://czhou.cc/2018/08/21/zerotier-for-NAT-between-home-and-work/</loc>
+    <lastmod>2018-08-21T07:30:09.726Z</lastmod>
+    <data>
+        <display>
+        <title>zerotier-for-NAT-between-home-and-work</title>
+        <pubTime>2018-08-21T01:29:56.000Z</pubTime>
+        
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://czhou.cc/2018/08/10/sync-vscode-with-dropbox/</loc>
-    <lastmod>2018-08-10T12:52:12.062Z</lastmod>
+    <lastmod>2018-08-10T12:52:12.000Z</lastmod>
     <data>
         <display>
         <title>Synchronize Visual Studio Code Settings by Dropbox</title>
@@ -27,7 +42,7 @@
     
   <url>
     <loc>http://czhou.cc/2016/04/29/install-ode-on-ubuntu/</loc>
-    <lastmod>2017-07-06T08:23:45.006Z</lastmod>
+    <lastmod>2017-07-06T08:23:45.000Z</lastmod>
     <data>
         <display>
         <title>在 Ubuntu 14.04 下安装 Open Dynamics Engine (ODE) 0.14</title>
@@ -49,7 +64,7 @@
     
   <url>
     <loc>http://czhou.cc/2016/05/01/open-sublime-after-hexo-new/</loc>
-    <lastmod>2016-12-20T16:05:18.843Z</lastmod>
+    <lastmod>2016-12-20T16:05:18.000Z</lastmod>
     <data>
         <display>
         <title>Hexo新建文章后立即打开Sublime Text编辑器</title>
@@ -77,9 +92,9 @@
         <title>Ubuntu下设置Sublime Text作为默认的文本编辑器</title>
         <pubTime>2016-05-03T11:02:09.000Z</pubTime>
         
-        <tag>Linux</tag>
-         
         <tag>Sublime</tag>
+         
+        <tag>Linux</tag>
          
          
            
