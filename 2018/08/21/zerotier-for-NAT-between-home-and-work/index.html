@@ -90,7 +90,7 @@
 <meta property="og:description" content="最近用Linux Deploy在旧安卓手机上配置了一个服务器，但是由于家里的网络没有公网ip，在外面无法连接到这个服务器上。同时，公司里的电脑也是只有内网ip，在家里也无法直接远程连接，所以稍微折腾了一下。">
 <meta property="og:image" content="http://czhou.cc/sweat_smile.png">
 <meta property="og:image" content="http://czhou.cc/zerotierGlobalRouteRule-updated.png">
-<meta property="og:updated_time" content="2018-08-21T11:33:16.016Z">
+<meta property="og:updated_time" content="2018-08-21T11:36:11.403Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用Zerotier内网穿透连接多个局域网内服务器以及VPN设置">
 <meta name="twitter:description" content="最近用Linux Deploy在旧安卓手机上配置了一个服务器，但是由于家里的网络没有公网ip，在外面无法连接到这个服务器上。同时，公司里的电脑也是只有内网ip，在家里也无法直接远程连接，所以稍微折腾了一下。">
@@ -414,8 +414,8 @@
 </ul>
 </li>
 </ul>
-<p>可见基本上囊括了常见的设备以及系统类型。（不列出来真不知道自己竟然有这么多设备<img src="sweat_smile.png" width="35">）\<br>网上搜索了一下，有不少解决方案，最终选定<a href="https://www.zerotier.com/" target="_blank" rel="external">Zerotier</a>，主要是因为其跨平台，易于配置，免费（100台设备以下免费，个人绝对够用）等特点，实际部署的时候虽然有点小坑（主要是安卓服务器上），但是确实特别容易就在所有的设备上都配置成功，并且测试通过所需功能。</p>
-<h1 id="配置Zerotier"><a href="#配置Zerotier" class="headerlink" title="配置Zerotier"></a>配置Zerotier</h1><p>关于Zerotier的原理，这个网上的介绍比较多，这里就不多说了。\<br>在设备上配置的大概步骤如下：</p>
+<p>可见基本上囊括了常见的设备以及系统类型。（不列出来真不知道自己竟然有这么多设备<img src="sweat_smile.png" width="35">）<br>网上搜索了一下，有不少解决方案，最终选定<a href="https://www.zerotier.com/" target="_blank" rel="external">Zerotier</a>，主要是因为其跨平台，易于配置，免费（100台设备以下免费，个人绝对够用）等特点，实际部署的时候虽然有点小坑（主要是安卓服务器上），但是确实特别容易就在所有的设备上都配置成功，并且测试通过所需功能。</p>
+<h1 id="配置Zerotier"><a href="#配置Zerotier" class="headerlink" title="配置Zerotier"></a>配置Zerotier</h1><p>关于Zerotier的原理，这个网上的介绍比较多，这里就不多说了。<br>在设备上配置的大概步骤如下：</p>
 <ol>
 <li>注册Zerotier账户并登陆</li>
 <li>在<code>Networks</code>里新建一个网络，记下<code>Network ID</code></li>
@@ -443,7 +443,7 @@
 </li>
 <li>回到官网，进入第2步建立的网络里，在<code>Managed Routes</code>添加路由规则，大概长下面这个样子，有个橘色的地球图标表示ip转发成功<br> <img src="zerotierGlobalRouteRule-updated.png" alt=""></li>
 </ol>
-<p>成功后，其他网络（L1，L3）的设备就可以通过L2网络上网了。\<br>也可以在利用<a href="https://checkmyip.com/" target="_blank" rel="external">checkmyip</a>等网络工具来确认VPN是否连接成功。</p>
+<p>成功后，其他网络（L1，L3）的设备就可以通过L2网络上网了。<br>也可以在利用<a href="https://checkmyip.com/" target="_blank" rel="external">checkmyip</a>等网络工具来确认VPN是否连接成功。</p>
 <p>更加具体的教程可以参照<a href="https://www.digitalocean.com/community/tutorials/getting-started-software-defined-networking-creating-vpn-zerotier-one" target="_blank" rel="external">这个</a>。</p>
 <h1 id="安卓服务器配置Zerotier"><a href="#安卓服务器配置Zerotier" class="headerlink" title="安卓服务器配置Zerotier"></a>安卓服务器配置Zerotier</h1><p>由于Linux Deploy安装的系统其实是实现了个<code>chroot()</code>，无法直接调用<code>systemd</code>命令，在安装过程中会直接ignore一些配置，导致安装Zerotier不完全，所以要稍微修改一下安装脚本，并手动安装配置文件。<br>更新第3步如下，</p>
 <ol>
