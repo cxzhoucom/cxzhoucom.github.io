@@ -43,8 +43,8 @@ function installProgramIfNotExist () {
 			_PROG_NAME=$2
 		fi
 		echo "Error: $1 is not installed." >&2 # redirect 'stdout' (1) to 'stderr' (2)
-		echo "install $1: sudo apt install $_PROG_NAME"
-		sudo apt-get install $_PROG_NAME || echo "$1 installation failed" && exit
+		echo "install $1: sudo apt-get install $_PROG_NAME"
+		sudo apt-get install -y $_PROG_NAME || echo "$1 installation failed" && exit
 	else
 		echo "$1 is already installed."
 	fi
