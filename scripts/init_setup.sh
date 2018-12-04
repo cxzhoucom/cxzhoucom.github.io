@@ -3,23 +3,23 @@
 clear
 
 # saves the absolute path of the current working directory
-CWD=$(pwd)
+cwd=$(pwd)
 
 # default config directory
-CONFIG_PATH=$HOME/.local/zconfigs
+config_path=$HOME/.local/zconfigs
 
 # if $1 exists, use $1 as config directory
 if [ $# -eq 1 ]; then
 	if [ -d "$1" ]; then
-		CONFIG_PATH="$1"
+		config_path="$1"
 	else
 		echo "$1 dose not exist... use default path"
 	fi
 fi
-echo "set ZHOU_CONFIG_PATH to $CONFIG_PATH"
+echo "set ZHOU_CONFIG_PATH to $config_path"
 
 # include my functions
-# . $CONFIG_PATH/scripts/func.sh # 'source' not working with /bin/sh, '.' works
+# . $config_path/scripts/func.sh # 'source' not working with /bin/sh, '.' works
 # . ./func.sh # 'source' not working with /bin/sh, '.' works
 wget -O /tmp/func.sh http://memo.czhou.cc/scripts/func.sh && . /tmp/func.sh || exit
 
@@ -29,12 +29,12 @@ sudo apt-get update
 installProgramIfNotExist git
 
 # git clone my configs
-if [ ! -d $CONFIG_PATH ]; then
+if [ ! -d $config_path ]; then
 	echo "create zconfigs directory."
-	mkdir -p $CONFIG_PATH && git clone https://gitlab.com/czhoucc/configs.git $CONFIG_PATH
+	mkdir -p $config_path && git clone https://gitlab.com/czhoucc/configs.git $config_path
 else
 	echo "update zconfigs directory."
-	cd $CONFIG_PATH && git pull origin master && cd $CWD
+	cd $config_path && git pull origin master && cd $cwd
 fi
 
 # if zsh not exist, install it
@@ -45,31 +45,47 @@ installProgramIfNotExist zsh
 # 
 # fill my .zshrc file
 backupFileIfExist $HOME/.zshrc
-echo "ZHOU_CONFIG_PATH=$CONFIG_PATH" > ~/.zshrc
+echo "ZHOU_CONFIG_PATH=$config_path" > ~/.zshrc
 echo 'source $ZHOU_CONFIG_PATH/antigen/antigenrc' >> ~/.zshrc
+echo 'source $HOME/.zshrc.local' >> ~/.zshrc # add local zsh configs, usually are user-dependent environment variables
 
 # if pip not exist, install it
 installProgramIfNotExist pip python-pip
 
 # setup wakatime
 pip install wakatime
-createSymbolicLinkAndBackupFile $CONFIG_PATH/wakatime/.wakatime.cfg $HOME/.wakatime.cfg
+createSymbolicLinkAndBackupFile $config_path/wakatime/.wakatime.cfg $HOME/.wakatime.cfg
 
 # create symbolic link of .zsh_history
-createSymbolicLinkAndBackupFile $CONFIG_PATH/antigen/.zsh_history $HOME/.zsh_history
+createSymbolicLinkAndBackupFile $config_path/antigen/.zsh_history $HOME/.zsh_history
 
 # if terminator not exist, install it
 installProgramIfNotExist terminator
 # create symbolic link of terminator config file
-createSymbolicLinkAndBackupFile $CONFIG_PATH/terminator/config $HOME/.config/terminator/config
+createSymbolicLinkAndBackupFile $config_path/terminator/config $HOME/.config/terminator/config
 
 # if vim not exist, install it
 installProgramIfNotExist vim
 # create symbolic link of vim config file
-createSymbolicLinkAndBackupFile $CONFIG_PATH/vim/.vimrc $HOME/.vimrc
+createSymbolicLinkAndBackupFile $config_path/vim/.vimrc $HOME/.vimrc
 
 # create symbolic link of keyboard mapping
-createSymbolicLinkAndBackupFile $CONFIG_PATH/xmodmap/.Xmodmap $HOME/.Xmodmap
+createSymbolicLinkAndBackupFile $config_path/xmodmap/.Xmodmap $HOME/.Xmodmap
+
+
+# if tmux not exist, install it
+installProgramIfNotExist tmux
+# create symbolic link of tmux config file
+createSymbolicLinkAndBackupFile $config_path/tmux/.tmux.conf $HOME/.tmux.conf
+createSymbolicLinkAndBackupFile $config_path/tmux/.tmux.conf.local $HOME/.tmux.conf.local
+
+
+
+
+
+
+
+
 
 # if not already use zsh; change the login shell to zsh
 if [[ ! $SHELL =~ "zsh" ]]; then
