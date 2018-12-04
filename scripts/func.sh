@@ -30,6 +30,10 @@ function createSymbolicLinkAndBackupFile () {
 	if [ -e $2 ] || [ -L $2 ]; then
 		backupFileIfExist $2
 	fi
+	local _symlink_path=$(dirname -- "$2") # get only dir name
+	if [ ! -e _symlink_path ]; then
+		mkdir -p _symlink_path
+	fi
 	ln -s $1 $2
 	echo "create symbolic link: $1 -> $2"
 }

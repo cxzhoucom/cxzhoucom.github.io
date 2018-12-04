@@ -47,7 +47,12 @@ installProgramIfNotExist zsh
 backupFileIfExist $HOME/.zshrc
 echo "ZHOU_CONFIG_PATH=$config_path" > ~/.zshrc
 echo 'source $ZHOU_CONFIG_PATH/antigen/antigenrc' >> ~/.zshrc
-echo 'source $HOME/.zshrc.local' >> ~/.zshrc # add local zsh configs, usually are user-dependent environment variables
+echo 'source $HOME/.zshrc.local' >> ~/.zshrc # add local zsh configs, usually are pc-dependent environment variables
+
+# if .zshrc.local not exist, create it and add default values
+if [ ! -e $HOME/.zshrc.local ]; then
+	echo 'export HOME_CLOUD_PATH="$HOME/HomeCloud"' > ~/.zshrc.local
+fi
 
 # if pip not exist, install it
 installProgramIfNotExist pip python-pip
