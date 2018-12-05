@@ -38,6 +38,20 @@ function createSymbolicLinkAndBackupFile () {
 	echo "create symbolic link: $1 -> $2"
 }
 
+
+# backup $2 and copy to $1
+function copyAndBackupFile () {
+	if [ -e $2 ] || [ -L $2 ]; then
+		backupFileIfExist $2
+	fi
+	local _destination_path=$(dirname -- "$2") # get only dir name
+	if [ ! -e $_destination_path ]; then
+		mkdir -p $_destination_path
+	fi
+	cp $1 $2
+	echo "create symbolic link: $1 -> $2"
+}
+
 # if program $1 not exist, install it
 # $1 is the program name, $2 is the package name in apt-get
 function installProgramIfNotExist () {
