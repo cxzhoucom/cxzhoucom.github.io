@@ -13,16 +13,17 @@ if [ $# -eq 1 ]; then
 	if [ -d "$1" ]; then
 		config_path="$1"
 	else
-		echo "$1 dose not exist... use default path"
+		echo "[$(date)] $1 dose not exist... use default path"
 	fi
 fi
-echo "set ZHOU_CONFIG_PATH to $config_path"
+echo "[$(date)] set ZHOU_CONFIG_PATH to $config_path"
 
 # include my functions
 # . $config_path/scripts/func.sh # 'source' not working with /bin/sh, '.' works
 # . ./func.sh # 'source' not working with /bin/sh, '.' works
 wget -O /tmp/func.sh http://memo.czhou.cc/scripts/func.sh && . /tmp/func.sh || exit
 
+echo "[$(date)] Adding PPAs"
 # add vscode repository
 wget -O- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
 sudo install -o root -g root -m 644 microsoft.gpg /etc/apt/trusted.gpg.d/
@@ -32,7 +33,11 @@ sudo apt-get install apt-transport-https
 # add Synapse repository
 sudo add-apt-repository ppa:synapse-core/ppa
 
+# add shutter repository
+sudo add-apt-repository ppa:shutter/ppa
 
+
+echo "[$(date)] Updating repositories"
 sudo apt-get update
 
 # if git not exist, install it
@@ -40,10 +45,10 @@ installProgramIfNotExist git
 
 # git clone my configs
 if [ ! -d $config_path ]; then
-	echo "create zconfigs directory."
+	echo "[$(date)] create zconfigs directory."
 	mkdir -p $config_path && git clone https://gitlab.com/czhoucc/configs.git $config_path
 else
-	echo "update zconfigs directory."
+	echo "[$(date)] update zconfigs directory."
 	cd $config_path && git pull origin master && cd $cwd
 fi
 
@@ -98,7 +103,7 @@ installProgramIfNotExist code
 code --install-extension shan.code-settings-sync # https://marketplace.visualstudio.com/items?itemName=Shan.code-settings-sync
 copyAndBackupFile $config_path/vscode/User/syncLocalSettings.json $HOME/.config/Code/User/syncLocalSettings.json
 copyAndBackupFile $config_path/vscode/User/settings.json $HOME/.config/Code/User/settings.json
-echo "Press Shift+Ctrl+D when you first open vscode."
+echo "[$(date)] Press Shift+Ctrl+D when you first open vscode."
 
 # if rg not exist, install it
 installProgramIfNotExist rg ripgrep # for Ubuntu 18.10 or above
@@ -108,16 +113,29 @@ installProgramIfNotExist synapse
 # create symbolic link of synapse config file
 createSymbolicLinkAndBackupFile $config_path/synapse/config.json $HOME/.config/synapse/config.json
 
+# if shutter not exist, install it
+installProgramIfNotExist shutter
+# TODO: need to add Ctrl+a shortcut later
+
+# if kazam not exist, install it
+installProgramIfNotExist kazam
+
+# if goldendict not exist, install it
+installProgramIfNotExist goldendict
+# TODO: setup dictionaries later
+
+# if meld not exist, install it
+installProgramIfNotExist meld
 
 
 
 # if not already use zsh; change the login shell to zsh
 if [[ ! $SHELL =~ "zsh" ]]; then
-	echo "change user ($USER) shell to zsh"
+	echo "[$(date)] change user ($USER) shell to zsh"
 	chsh -s $(which zsh) $USER && exec zsh
 fi
 
-echo "You are all set, keep working and have fun!"
+echo "[$(date)] You are all set, keep working and have fun!"
 
 
 
