@@ -36,6 +36,10 @@ sudo add-apt-repository ppa:synapse-core/ppa
 # add shutter repository
 sudo add-apt-repository ppa:shutter/ppa
 
+# add nextcloud repository
+sudo add-apt-repository ppa:nextcloud-devs/client
+
+
 
 echo "[$(date)] Updating repositories"
 sudo apt-get update
@@ -79,11 +83,6 @@ createSymbolicLinkAndBackupFile $config_path/wakatime/.wakatime.cfg $HOME/.wakat
 # create symbolic link of .zsh_history
 createSymbolicLinkAndBackupFile $config_path/antigen/.zsh_history $HOME/.zsh_history
 
-# if terminator not exist, install it
-installProgramIfNotExist terminator
-# create symbolic link of terminator config file
-createSymbolicLinkAndBackupFile $config_path/terminator/config $HOME/.config/terminator/config
-
 # if vim not exist, install it
 installProgramIfNotExist vim
 # create symbolic link of vim config file
@@ -98,15 +97,23 @@ installProgramIfNotExist tmux
 createSymbolicLinkAndBackupFile $config_path/tmux/.tmux.conf $HOME/.tmux.conf
 createSymbolicLinkAndBackupFile $config_path/tmux/.tmux.conf.local $HOME/.tmux.conf.local
 
+# if rg not exist, install it
+installProgramIfNotExist rg ripgrep # for Ubuntu 18.10 or above
+
+
+# install softwares with X window
+# 
+# if terminator not exist, install it
+installProgramIfNotExist terminator
+# create symbolic link of terminator config file
+createSymbolicLinkAndBackupFile $config_path/terminator/config $HOME/.config/terminator/config
+
 # if vscode not exist, install it and setup settings-sync extension
 installProgramIfNotExist code
 code --install-extension shan.code-settings-sync # https://marketplace.visualstudio.com/items?itemName=Shan.code-settings-sync
 copyAndBackupFile $config_path/vscode/User/syncLocalSettings.json $HOME/.config/Code/User/syncLocalSettings.json
 copyAndBackupFile $config_path/vscode/User/settings.json $HOME/.config/Code/User/settings.json
 echo "[$(date)] Press Shift+Ctrl+D when you first open vscode."
-
-# if rg not exist, install it
-installProgramIfNotExist rg ripgrep # for Ubuntu 18.10 or above
                                     
 # if synapse not exist, install it
 installProgramIfNotExist synapse
@@ -126,6 +133,9 @@ installProgramIfNotExist goldendict
 
 # if meld not exist, install it
 installProgramIfNotExist meld
+
+# if meld not exist, install it
+installProgramIfNotExist nextcloud nextcloud-client
 
 
 
