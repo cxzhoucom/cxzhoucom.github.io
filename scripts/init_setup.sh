@@ -23,11 +23,14 @@ echo "set ZHOU_CONFIG_PATH to $config_path"
 # . ./func.sh # 'source' not working with /bin/sh, '.' works
 wget -O /tmp/func.sh http://memo.czhou.cc/scripts/func.sh && . /tmp/func.sh || exit
 
-# for vscode
+# add vscode repository
 wget -O- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
 sudo install -o root -g root -m 644 microsoft.gpg /etc/apt/trusted.gpg.d/
 sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
 sudo apt-get install apt-transport-https
+
+# add Synapse repository
+sudo add-apt-repository ppa:synapse-core/ppa
 
 
 sudo apt-get update
@@ -90,12 +93,21 @@ installProgramIfNotExist tmux
 createSymbolicLinkAndBackupFile $config_path/tmux/.tmux.conf $HOME/.tmux.conf
 createSymbolicLinkAndBackupFile $config_path/tmux/.tmux.conf.local $HOME/.tmux.conf.local
 
-# if vscode not exist, install it
+# if vscode not exist, install it and setup settings-sync extension
 installProgramIfNotExist code
 code --install-extension shan.code-settings-sync # https://marketplace.visualstudio.com/items?itemName=Shan.code-settings-sync
 copyAndBackupFile $config_path/vscode/User/syncLocalSettings.json $HOME/.config/Code/User/syncLocalSettings.json
 copyAndBackupFile $config_path/vscode/User/settings.json $HOME/.config/Code/User/settings.json
 echo "Press Shift+Ctrl+D when you first open vscode."
+
+# if rg not exist, install it
+installProgramIfNotExist rg ripgrep # for Ubuntu 18.10 or above
+                                    
+# if synapse not exist, install it
+installProgramIfNotExist synapse
+# create symbolic link of synapse config file
+createSymbolicLinkAndBackupFile $config_path/synapse/config.json $HOME/.config/synapse/config.json
+
 
 
 
