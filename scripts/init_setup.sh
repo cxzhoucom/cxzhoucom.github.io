@@ -5,6 +5,17 @@ clear
 # saves the absolute path of the current working directory
 cwd=$(pwd)
 
+pc_type="normal"
+
+while true; do
+    read -p "[$(date)] Plese select the computer type (1 normal; 2 server): " yn
+    case $yn in
+        [1]* ) break;;
+        [2]* ) pc_type="server"; echo "[$(date)] You are on server, will not install X software"; break;;
+        * ) echo "[$(date)] Please input 1 or 2.";;
+    esac
+done
+
 # default config directory
 config_path=$HOME/.local/zconfigs
 
@@ -24,25 +35,27 @@ echo "[$(date)] set ZHOU_CONFIG_PATH to $config_path"
 wget -O /tmp/func.sh http://memo.czhou.cc/scripts/func.sh && . /tmp/func.sh || exit
 
 echo "[$(date)] Adding PPAs"
-# add vscode repository
-wget -O- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /tmp/microsoft.gpg
-sudo install -o root -g root -m 644 /tmp/microsoft.gpg /etc/apt/trusted.gpg.d/
-sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
-sudo apt-get install apt-transport-https
 
-# add chrome repository
-wget -O- https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list'
+if [ "$pc_type" = "normal" ]; then
+	# add vscode repository
+	wget -O- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /tmp/microsoft.gpg
+	sudo install -o root -g root -m 644 /tmp/microsoft.gpg /etc/apt/trusted.gpg.d/
+	sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
+	sudo apt-get install apt-transport-https
 
-# add Synapse repository
-sudo add-apt-repository -y ppa:synapse-core/ppa
+	# add chrome repository
+	wget -O- https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+	sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list'
 
-# add shutter repository
-sudo add-apt-repository -y ppa:shutter/ppa
+	# add Synapse repository
+	sudo add-apt-repository -y ppa:synapse-core/ppa
 
-# add nextcloud repository
-sudo add-apt-repository -y ppa:nextcloud-devs/client
+	# add shutter repository
+	sudo add-apt-repository -y ppa:shutter/ppa
 
+	# add nextcloud repository
+	sudo add-apt-repository -y ppa:nextcloud-devs/client
+fi
 
 
 echo "[$(date)] Updating repositories"
@@ -53,10 +66,10 @@ installProgramIfNotExist git
 
 # git clone my configs
 if [ ! -d $config_path ]; then
-	echo "[$(date)] create zconfigs directory."
+	echo "[$(date)] Creating zconfigs directory."
 	mkdir -p $config_path && git clone https://gitlab.com/czhoucc/configs.git $config_path
 else
-	echo "[$(date)] update zconfigs directory."
+	echo "[$(date)] Updating zconfigs directory."
 	cd $config_path && git pull origin master && cd $cwd
 fi
 
@@ -77,8 +90,10 @@ if [ ! -e $HOME/.zshrc.local ]; then
 	echo 'export HOME_CLOUD_PATH="$HOME/HomeCloud"' > ~/.zshrc.local
 fi
 
+# for python2
 # if pip not exist, install it
 installProgramIfNotExist pip python-pip
+sudo apt-get install -y python-setuptools
 
 # setup wakatime
 pip install wakatime
@@ -106,49 +121,49 @@ createSymbolicLinkAndBackupFile $config_path/tmux/.tmux.conf.local $HOME/.tmux.c
 
 
 # install softwares with X window
-# 
-# if terminator not exist, install it
-installProgramIfNotExist terminator
-# create symbolic link of terminator config file
-createSymbolicLinkAndBackupFile $config_path/terminator/config $HOME/.config/terminator/config
+if [ "$pc_type" = "normal" ]; then
+	# if terminator not exist, install it
+	installProgramIfNotExist terminator
+	# create symbolic link of terminator config file
+	createSymbolicLinkAndBackupFile $config_path/terminator/config $HOME/.config/terminator/config
 
-# if vscode not exist, install it and setup settings-sync extension
-installProgramIfNotExist code
-code --install-extension shan.code-settings-sync # https://marketplace.visualstudio.com/items?itemName=Shan.code-settings-sync
-copyAndBackupFile $config_path/vscode/User/syncLocalSettings.json $HOME/.config/Code/User/syncLocalSettings.json
-copyAndBackupFile $config_path/vscode/User/settings.json $HOME/.config/Code/User/settings.json
-echo "[$(date)] Press Shift+Ctrl+D when you first open vscode."
+	# if vscode not exist, install it and setup settings-sync extension
+	installProgramIfNotExist code
+	code --install-extension shan.code-settings-sync # https://marketplace.visualstudio.com/items?itemName=Shan.code-settings-sync
+	copyAndBackupFile $config_path/vscode/User/syncLocalSettings.json $HOME/.config/Code/User/syncLocalSettings.json
+	copyAndBackupFile $config_path/vscode/User/settings.json $HOME/.config/Code/User/settings.json
+	echo "[$(date)] Press Shift+Ctrl+D when you first open vscode."
 
-# if chrome not exist, install it
-installProgramIfNotExist google-chrome google-chrome-stable
+	# if chrome not exist, install it
+	installProgramIfNotExist google-chrome google-chrome-stable
 
-# if synapse not exist, install it
-installProgramIfNotExist synapse
-# create symbolic link of synapse config file
-createSymbolicLinkAndBackupFile $config_path/synapse/config.json $HOME/.config/synapse/config.json
+	# if synapse not exist, install it
+	installProgramIfNotExist synapse
+	# create symbolic link of synapse config file
+	createSymbolicLinkAndBackupFile $config_path/synapse/config.json $HOME/.config/synapse/config.json
 
-# if shutter not exist, install it
-installProgramIfNotExist shutter
-# TODO: need to add Ctrl+a shortcut later
+	# if shutter not exist, install it
+	installProgramIfNotExist shutter
+	# TODO: need to add Ctrl+a shortcut later
 
-# if kazam not exist, install it
-installProgramIfNotExist kazam
+	# if kazam not exist, install it
+	installProgramIfNotExist kazam
 
-# if goldendict not exist, install it
-installProgramIfNotExist goldendict
-# TODO: setup dictionaries later
+	# if goldendict not exist, install it
+	installProgramIfNotExist goldendict
+	# TODO: setup dictionaries later
 
-# if meld not exist, install it
-installProgramIfNotExist meld
+	# if meld not exist, install it
+	installProgramIfNotExist meld
 
-# if meld not exist, install it
-installProgramIfNotExist nextcloud nextcloud-client
-
+	# if meld not exist, install it
+	installProgramIfNotExist nextcloud nextcloud-client
+fi
 
 
 # if not already use zsh; change the login shell to zsh
 if [[ ! $SHELL =~ "zsh" ]]; then
-	echo "[$(date)] change user ($USER) shell to zsh"
+	echo "[$(date)] Changing user ($USER) shell to zsh"
 	chsh -s $(which zsh) $USER && exec zsh
 fi
 
