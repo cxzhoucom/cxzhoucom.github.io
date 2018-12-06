@@ -20,7 +20,7 @@
 function backupFileIfExist () {
 	local _file_name=$(basename -- "$1") # get only file name
 	if [ -e $1 ] || [ -L $1 ]; then
-		echo "$1 already exist, move it to ~/backup/$_file_name"
+		echo "[$(date)] $1 already exist, move it to ~/backup/$_file_name"
 		mkdir -p $HOME/backup && mv $1 $HOME/backup/$_file_name
 	fi
 }
@@ -35,7 +35,7 @@ function createSymbolicLinkAndBackupFile () {
 		mkdir -p $_symlink_path
 	fi
 	ln -s $1 $2
-	echo "create symbolic link: $1 -> $2"
+	echo "[$(date)] create symbolic link: $1 -> $2"
 }
 
 
@@ -49,7 +49,7 @@ function copyAndBackupFile () {
 		mkdir -p $_destination_path
 	fi
 	cp $1 $2
-	echo "create symbolic link: $1 -> $2"
+	echo "[$(date)] create symbolic link: $1 -> $2"
 }
 
 # if program $1 not exist, install it
@@ -60,11 +60,11 @@ function installProgramIfNotExist () {
 		if [ $# -eq 2 ]; then # $# variable: the number of input arguments
 			_prog_name=$2
 		fi
-		echo "Error: $1 is not installed." >&2 # redirect 'stdout' (1) to 'stderr' (2)
-		echo "install $1: sudo apt-get install $_prog_name"
+		echo "[$(date)] Error: $1 is not installed." >&2 # redirect 'stdout' (1) to 'stderr' (2)
+		echo "[$(date)] install $1: sudo apt-get install $_prog_name"
 		sudo apt-get -y install $_prog_name || exit
-		echo "$1 is installed."
+		echo "[$(date)] $1 is installed."
 	else
-		echo "$1 is already installed."
+		echo "[$(date)] $1 is already installed."
 	fi
 }

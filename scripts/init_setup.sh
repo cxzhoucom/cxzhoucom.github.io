@@ -25,19 +25,23 @@ wget -O /tmp/func.sh http://memo.czhou.cc/scripts/func.sh && . /tmp/func.sh || e
 
 echo "[$(date)] Adding PPAs"
 # add vscode repository
-wget -O- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
-sudo install -o root -g root -m 644 microsoft.gpg /etc/apt/trusted.gpg.d/
+wget -O- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /tmp/microsoft.gpg
+sudo install -o root -g root -m 644 /tmp/microsoft.gpg /etc/apt/trusted.gpg.d/
 sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
 sudo apt-get install apt-transport-https
 
+# add chrome repository
+wget -O- https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list'
+
 # add Synapse repository
-sudo add-apt-repository ppa:synapse-core/ppa
+sudo add-apt-repository -y ppa:synapse-core/ppa
 
 # add shutter repository
-sudo add-apt-repository ppa:shutter/ppa
+sudo add-apt-repository -y ppa:shutter/ppa
 
 # add nextcloud repository
-sudo add-apt-repository ppa:nextcloud-devs/client
+sudo add-apt-repository -y ppa:nextcloud-devs/client
 
 
 
@@ -98,7 +102,7 @@ createSymbolicLinkAndBackupFile $config_path/tmux/.tmux.conf $HOME/.tmux.conf
 createSymbolicLinkAndBackupFile $config_path/tmux/.tmux.conf.local $HOME/.tmux.conf.local
 
 # if rg not exist, install it
-installProgramIfNotExist rg ripgrep # for Ubuntu 18.10 or above
+# installProgramIfNotExist rg ripgrep # for Ubuntu 18.10 or above
 
 
 # install softwares with X window
@@ -114,7 +118,10 @@ code --install-extension shan.code-settings-sync # https://marketplace.visualstu
 copyAndBackupFile $config_path/vscode/User/syncLocalSettings.json $HOME/.config/Code/User/syncLocalSettings.json
 copyAndBackupFile $config_path/vscode/User/settings.json $HOME/.config/Code/User/settings.json
 echo "[$(date)] Press Shift+Ctrl+D when you first open vscode."
-                                    
+
+# if chrome not exist, install it
+installProgramIfNotExist google-chrome google-chrome-stable
+
 # if synapse not exist, install it
 installProgramIfNotExist synapse
 # create symbolic link of synapse config file
