@@ -69,7 +69,7 @@ installProgramIfNotExist zsh
 # fill my .zshrc file
 backupFileIfExist $HOME/.zshrc
 echo "ZHOU_CONFIG_PATH=$config_path" > ~/.zshrc
-echo 'source $ZHOU_CONFIG_PATH/antigen/antigenrc' >> ~/.zshrc
+echo 'source $ZHOU_CONFIG_PATH/zsh/antigenrc' >> ~/.zshrc
 echo 'source $HOME/.zshrc.local' >> ~/.zshrc # add local zsh configs, usually are pc-dependent environment variables
 
 # if .zshrc.local not exist, create it and add default values
@@ -85,7 +85,7 @@ pip install wakatime
 createSymbolicLinkAndBackupFile $config_path/wakatime/.wakatime.cfg $HOME/.wakatime.cfg
 
 # create symbolic link of .zsh_history
-createSymbolicLinkAndBackupFile $config_path/antigen/.zsh_history $HOME/.zsh_history
+createSymbolicLinkAndBackupFile $config_path/zsh/.zsh_history $HOME/.zsh_history
 
 # if vim not exist, install it
 installProgramIfNotExist vim
