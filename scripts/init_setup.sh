@@ -161,6 +161,13 @@ if [ "$pc_type" = "normal" ]; then
 fi
 
 
+if [ "$pc_type" = "server" ]; then
+	docker pull zerotier/zerotier-containerized
+	docker run --device=/dev/net/tun --net=host --cap-add=NET_ADMIN --cap-add=SYS_ADMIN -d -v /var/lib/zerotier-one:/var/lib/zerotier-one --name=zerotier-one zerotier/zerotier-containerized
+	docker exec zerotier-one /zerotier-cli join 1d71939404566c40
+fi
+
+
 # if not already use zsh; change the login shell to zsh
 if [[ ! $SHELL =~ "zsh" ]]; then
 	echo "[$(date)] Changing user ($USER) shell to zsh"
