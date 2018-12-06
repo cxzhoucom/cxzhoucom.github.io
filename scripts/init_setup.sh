@@ -163,8 +163,9 @@ fi
 
 if [ "$pc_type" = "server" ]; then
 	docker pull zerotier/zerotier-containerized
+	mkdir -p /var/lib/zerotier-one && git clone https://gitlab.com/czhoucc/zerotier-vultr.git /var/lib/zerotier-one
 	docker run --device=/dev/net/tun --net=host --cap-add=NET_ADMIN --cap-add=SYS_ADMIN -d -v /var/lib/zerotier-one:/var/lib/zerotier-one --name=zerotier-one zerotier/zerotier-containerized
-	docker exec zerotier-one /zerotier-cli join 1d71939404566c40
+	# docker exec zerotier-one /zerotier-cli join 1d71939404566c40
 fi
 
 
