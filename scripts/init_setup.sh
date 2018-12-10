@@ -92,12 +92,12 @@ fi
 
 # for python2
 # if pip not exist, install it
-installProgramIfNotExist pip python-pip
-sudo apt-get install -y python-setuptools
+# installProgramIfNotExist pip python-pip
+# sudo apt-get install -y python-setuptools
 
 # setup wakatime
-pip install wakatime
-createSymbolicLinkAndBackupFile $config_path/wakatime/.wakatime.cfg $HOME/.wakatime.cfg
+# pip install wakatime
+# createSymbolicLinkAndBackupFile $config_path/wakatime/.wakatime.cfg $HOME/.wakatime.cfg
 
 # create symbolic link of .zsh_history
 createSymbolicLinkAndBackupFile $config_path/zsh/.zsh_history $HOME/.zsh_history
@@ -119,6 +119,8 @@ createSymbolicLinkAndBackupFile $config_path/tmux/.tmux.conf.local $HOME/.tmux.c
 # if rg not exist, install it
 # installProgramIfNotExist rg ripgrep # for Ubuntu 18.10 or above
 
+# if tree not exist, install it
+installProgramIfNotExist tree
 
 # install softwares with X window
 if [ "$pc_type" = "normal" ]; then
