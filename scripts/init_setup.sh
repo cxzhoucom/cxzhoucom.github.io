@@ -6,7 +6,6 @@ clear
 cwd=$(pwd)
 
 pc_type="normal"
-
 while true; do
     read -p "[$(date)] Plese select the computer type (1 normal; 2 server): " yn
     case $yn in
@@ -15,6 +14,19 @@ while true; do
         * ) echo "[$(date)] Please input 1 or 2.";;
     esac
 done
+
+# use UPDATE to create configs symlink from Dropbox
+setup_type="first"
+if [ "$pc_type" = "server" ]; then
+	while true; do
+		read -p "[$(date)] Plese select the setup type (1 first time; 2 update): " yn
+		case $yn in
+			[1]* ) break;;
+			[2]* ) setup_type="update"; echo "[$(date)] You are update the configs, will NOT git clone your configs"; break;;
+			* ) echo "[$(date)] Please input 1 or 2.";;
+		esac
+	done
+fi
 
 # default config directory
 config_path=$HOME/.local/zconfigs
@@ -64,13 +76,25 @@ sudo apt-get update
 # if git not exist, install it
 installProgramIfNotExist git
 
-# git clone my configs
-if [ ! -d $config_path ]; then
-	echo "[$(date)] Creating zconfigs directory."
-	mkdir -p $config_path && git clone https://gitlab.com/czhoucc/configs.git $config_path
+if [ "$setup_type" = "first" ]; then
+	# git clone my configs
+	if [ ! -d $config_path ]; then
+		echo "[$(date)] Creating zconfigs directory."
+		mkdir -p $config_path && git clone https://gitlab.com/czhoucc/configs.git $config_path
+	else
+		echo "[$(date)] Updating zconfigs directory."
+		cd $config_path && git pull origin master && cd $cwd
+	fi
+elif [ "$setup_type" = "update" ]; then
+	if ! [ -x "$(command -v dropbox)" ]; then
+		echo "[$(date)] Dropbox is not installed."
+		exit
+	else
+		createSymbolicLinkAndBackupFile $HOME/Dropbox/codes/configs $config_path
+	fi
 else
-	echo "[$(date)] Updating zconfigs directory."
-	cd $config_path && git pull origin master && cd $cwd
+	echo "[$(date)] Not correct setup_type."
+	exit
 fi
 
 # if zsh not exist, install it
