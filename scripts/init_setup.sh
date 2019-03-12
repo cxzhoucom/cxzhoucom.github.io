@@ -69,6 +69,11 @@ if [ "$pc_type" = "normal" ]; then
 	sudo add-apt-repository -y ppa:nextcloud-devs/client
 fi
 
+if [ "$pc_type" = "server" ]; then
+	curl -fsSL https://get.docker.com -o get-docker.sh
+	$ sudo sh get-docker.sh
+fi
+
 
 echo "[$(date)] Updating repositories"
 sudo apt-get update
