@@ -133,6 +133,7 @@ createSymbolicLinkAndBackupFile $config_path/zsh/.zsh_history $HOME/.zsh_history
 
 # if vim not exist, install it
 installProgramIfNotExist vim
+git clone https://github.com/VundleVim/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim
 # create symbolic link of vim config file
 createSymbolicLinkAndBackupFile $config_path/vim/.vimrc $HOME/.vimrc
 
