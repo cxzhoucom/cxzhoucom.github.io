@@ -78,6 +78,8 @@ fi
 echo "[$(date)] Updating repositories"
 sudo apt-get update
 
+sudo apt-get install build-essential cmake python3-dev python3-pip ctags
+
 # if git not exist, install it
 installProgramIfNotExist git
 
@@ -134,6 +136,9 @@ createSymbolicLinkAndBackupFile $config_path/zsh/.zsh_history $HOME/.zsh_history
 # if vim not exist, install it
 installProgramIfNotExist vim
 git clone https://github.com/VundleVim/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim
+echo "[$(date)] in vim, run :PluginInstall"
+echo "[$(date)] then, cd ~/.vim/bundle/YouCompleteMe"
+echo "[$(date)] then, python3 install.py --all"
 # create symbolic link of vim config file
 createSymbolicLinkAndBackupFile $config_path/vim/.vimrc $HOME/.vimrc
 
