@@ -79,7 +79,7 @@ fi
 echo "[$(date)] Updating repositories"
 sudo apt-get update
 
-sudo apt-get install build-essential cmake python3-dev python3-pip ctags
+sudo apt-get install build-essential cmake cmake-curses-gui python3-dev python3-pip ctags
 
 # if git not exist, install it
 installProgramIfNotExist git
@@ -120,6 +120,9 @@ echo 'source $HOME/.zshrc.local' >> ~/.zshrc # add local zsh configs, usually ar
 # if .zshrc.local not exist, create it and add default values
 if [ ! -e $HOME/.zshrc.local ]; then
 	echo 'export HOME_CLOUD_PATH="$HOME/HomeCloud"' > ~/.zshrc.local
+	if [ "$pc_type" = "normal" ]; then
+		echo 'export HISTFILE="$ZHOU_CONFIG_PATH/zsh/.zsh_history"' >> ~/.zshrc.local
+	fi
 fi
 
 # for python2
@@ -133,6 +136,9 @@ fi
 
 # create symbolic link of .zsh_history
 createSymbolicLinkAndBackupFile $config_path/zsh/.zsh_history $HOME/.zsh_history
+
+# create symbolic link of gitignore_global
+createSymbolicLinkAndBackupFile $config_path/git/ignore $HOME/.config/git/ignore
 
 # if vim not exist, install it
 installProgramIfNotExist vim
